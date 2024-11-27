@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit(0); // Preflight request handled, exit
+    exit(0); // Preflight request handled
 }
 
 echo json_encode(["status" => "Garbage cleanup completed successfully."]);
@@ -14,15 +14,13 @@ echo json_encode(["status" => "Garbage cleanup completed successfully."]);
 @ini_set('output_handler', '');
 
 function getChunkCount() {
-    if (!array_key_exists('ckSize', $_GET) || !ctype_digit($_GET['ckSize']) || (int) $_GET['ckSize'] <= 0) {
-        return 4;
+    $defaultChunks = 4;
+    if (!isset($_GET['ckSize']) || !ctype_digit($_GET['ckSize'])) {
+        return $defaultChunks;
     }
 
-    if ((int) $_GET['ckSize'] > 1024) {
-        return 1024;
-    }
-
-    return (int) $_GET['ckSize'];
+    $size = (int)$_GET['ckSize'];
+    return ($size > 0 && $size <= 1024) ? $size : $defaultChunks;
 }
 
 function sendHeaders() {
@@ -31,13 +29,12 @@ function sendHeaders() {
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename=random.dat');
     header('Content-Transfer-Encoding: binary');
-    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, s-maxage=0');
-    header('Cache-Control: post-check=0, pre-check=0', false);
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
 }
 
 $chunks = getChunkCount();
-$data = openssl_random_pseudo_bytes(1048576);
+$data = openssl_random_pseudo_bytes(1048576); // 1MB
 
 sendHeaders();
 
