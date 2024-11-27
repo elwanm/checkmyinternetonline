@@ -7,14 +7,11 @@
  */
 
 
-// Allow cross-origin requests (CORS)
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-// Get the user's IP address
 $ip = $_SERVER['REMOTE_ADDR'];
 
-// Return the IP address as JSON
 echo json_encode(['ip' => $ip]);
 
 
