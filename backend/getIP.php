@@ -7,10 +7,16 @@
  */
 
 
-header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 $ip = $_SERVER['REMOTE_ADDR'];
+
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+echo json_encode(["status" => "GetIP cleanup completed successfully."]);
+
 
 echo json_encode(['ip' => $ip]);
 
