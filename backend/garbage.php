@@ -3,38 +3,30 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0); // Preflight request handled, exit
+}
+
 echo json_encode(["status" => "Garbage cleanup completed successfully."]);
 
 @ini_set('zlib.output_compression', 'Off');
 @ini_set('output_buffering', 'Off');
 @ini_set('output_handler', '');
 
-function getChunkCount()
-{
-    if (
-        !array_key_exists('ckSize', $_GET)
-        || !ctype_digit($_GET['ckSize'])
-        || (int) $_GET['ckSize'] <= 0
-    ) {
-        return 4; // Default chunk size if none specified
+function getChunkCount() {
+    if (!array_key_exists('ckSize', $_GET) || !ctype_digit($_GET['ckSize']) || (int) $_GET['ckSize'] <= 0) {
+        return 4;
     }
 
     if ((int) $_GET['ckSize'] > 1024) {
-        return 1024; // Max chunk size
+        return 1024;
     }
 
-    return (int) $_GET['ckSize']; // Return the chunk size from the query parameter
+    return (int) $_GET['ckSize'];
 }
 
-function sendHeaders()
-{
-    header('HTTP/1.1 200 OK'); // Response OK header
-
-    if (isset($_GET['cors'])) {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST');
-    }
-
+function sendHeaders() {
+    header('HTTP/1.1 200 OK');
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename=random.dat');
@@ -45,15 +37,12 @@ function sendHeaders()
 }
 
 $chunks = getChunkCount();
-
 $data = openssl_random_pseudo_bytes(1048576);
 
 sendHeaders();
 
 for ($i = 0; $i < $chunks; $i++) {
     echo $data;
-    flush(); // Send output immediately
+    flush();
 }
-
-
 ?>
