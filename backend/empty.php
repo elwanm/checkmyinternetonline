@@ -2,15 +2,10 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, s-maxage=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
-header('Connection: keep-alive');
+header("Access-Control-Allow-Credentials: true");
 
-if (isset($_GET['cors'])) {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST');
-    header('Access-Control-Allow-Headers: Content-Encoding, Content-Type');
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0); // Preflight request handled, exit
 }
 
 header('HTTP/1.1 200 OK');
