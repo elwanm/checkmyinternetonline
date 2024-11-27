@@ -5,7 +5,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Credentials: true");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit(0); // Preflight request handled, exit
+    exit(0); // Preflight request handled
 }
 
 header('HTTP/1.1 200 OK');
