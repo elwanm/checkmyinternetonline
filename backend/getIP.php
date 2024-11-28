@@ -12,7 +12,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 // Function to fetch ISP and location details from IPInfo
 function getIspInfo($ip) {
     $apiToken = '652c590dac3eb4'; // Replace with your valid IPInfo API token
-    $url = 'https://ipinfo.io/' . $ip . '/json?token=' . $apiToken;
+    $url = 'https://ipinfo.io/' . $ip . '?token=' . $apiToken;
 
     // Fetch data using file_get_contents
     try {
